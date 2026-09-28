@@ -226,7 +226,7 @@ function buildLetter(){
   letter+='\n\nDue to this unavoidable situation, I missed the following academic activities,\nName: '+name+'\nAcademic Activities Missed:\n';
   letter+=getLetterActivityLines().map(x=>'- '+x).join('\n');
   letter+='\n\nAs per the university guidelines, I have attached the original Medical Certificate and the duly completed S-01 Form along with this letter for your reference.';
-  letter+='\n\n'+request+'\n\nThank you for your time and understanding.\n\nYours faithfully,\n'+name+(tel?'\nContact No.: '+tel:'');
+  letter+='\n\n'+request+'\n\nThank you for your time and understanding.\n\n\n\n\nYours faithfully,\n'+name+(tel?'\nContact No.: '+tel:'');
   return letter;
 }
 function generate(){
