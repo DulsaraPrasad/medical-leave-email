@@ -157,7 +157,6 @@ footer{padding:0 0 35px;text-align:center;color:var(--muted);font-size:12px}
   Your entered information is processed in this browser and is not sent to a server by this website.
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
 <script>
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').trim();
@@ -266,31 +265,55 @@ $('mailto').onclick=()=>{
 $('pdf').onclick=()=>{
   const result=generate();
   if(!result) return;
-  if(!window.jspdf){
-    $('status').style.color='#dc2626';
-    $('status').textContent='PDF library could not load. Please refresh the page and try again.';
-    return;
+
+  // Self-contained PDF writer. No external library or CDN is required.
+  function pdfEscape(text){
+    return String(text).replace(/\\/g,'\\\\').replace(/\(/g,'\\(').replace(/\)/g,'\\)').replace(/[^\x20-\x7E]/g,'?');
   }
-  const {jsPDF}=window.jspdf;
-  const doc=new jsPDF({unit:'mm',format:'a4'});
-  const margin=20, maxWidth=170, bottom=275;
-  let y=20;
-  doc.setFont('times','normal');
-  doc.setFontSize(11);
-  const paragraphs=result.letter.split('\n');
-  for(const paragraph of paragraphs){
-    if(paragraph.trim()===''){ y+=4; continue; }
-    const wrapped=doc.splitTextToSize(paragraph,maxWidth);
-    for(const line of wrapped){
-      if(y>bottom){ doc.addPage(); y=20; }
-      doc.text(line,margin,y);
-      y+=5.4;
+  function wrapText(text,maxChars){
+    const out=[];
+    for(const raw of text.split('\n')){
+      if(raw===''){out.push('');continue;}
+      let line='';
+      for(const word of raw.trim().split(/\s+/)){
+        const candidate=line?line+' '+word:word;
+        if(candidate.length>maxChars && line){out.push(line);line=word;}else line=candidate;
+      }
+      out.push(line);
     }
+    return out;
   }
+  function makePDF(text){
+    const W=595.28,H=841.89,M=56.7,leading=17,maxChars=88;
+    const lines=wrapText(text,maxChars), perPage=Math.floor((H-2*M)/leading), pages=[];
+    for(let i=0;i<lines.length;i+=perPage) pages.push(lines.slice(i,i+perPage));
+    if(!pages.length) pages.push(['']);
+    const objects=[]; const add=o=>{objects.push(o);return objects.length;};
+    const catalog=add(''); const pagesObj=add('');
+    const font=add('<< /Type /Font /Subtype /Type1 /BaseFont /Times-Roman >>');
+    const pageIds=[];
+    for(const pageLines of pages){
+      let stream='BT\n/F1 11 Tf\n'+M+' '+(H-M-11)+' Td\n';
+      for(const line of pageLines){stream+='('+pdfEscape(line)+') Tj\n0 -'+leading+' Td\n';}
+      stream+='ET';
+      const content=add('<< /Length '+stream.length+' >>\nstream\n'+stream+'\nendstream');
+      pageIds.push(add('<< /Type /Page /Parent '+pagesObj+' 0 R /MediaBox [0 0 '+W+' '+H+'] /Resources << /Font << /F1 '+font+' 0 R >> >> /Contents '+content+' 0 R >>'));
+    }
+    objects[catalog-1]='<< /Type /Catalog /Pages '+pagesObj+' 0 R >>';
+    objects[pagesObj-1]='<< /Type /Pages /Kids ['+pageIds.map(x=>x+' 0 R').join(' ')+'] /Count '+pageIds.length+' >>';
+    let pdf='%PDF-1.4\n%\xE2\xE3\xCF\xD3\n'; const offsets=[0];
+    for(let i=0;i<objects.length;i++){offsets.push(pdf.length);pdf+=(i+1)+' 0 obj\n'+objects[i]+'\nendobj\n';}
+    const xref=pdf.length;
+    pdf+='xref\n0 '+(objects.length+1)+'\n0000000000 65535 f \n';
+    for(let i=1;i<=objects.length;i++) pdf+=String(offsets[i]).padStart(10,'0')+' 00000 n \n';
+    pdf+='trailer\n<< /Size '+(objects.length+1)+' /Root '+catalog+' 0 R >>\nstartxref\n'+xref+'\n%%EOF';
+    return new Blob([pdf],{type:'application/pdf'});
+  }
+  const blob=makePDF(result.letter), url=URL.createObjectURL(blob), a=document.createElement('a');
   const safe=(esc($('index').value)||'student').replace(/[^a-z0-9_-]+/gi,'_');
-  doc.save('Medical_Leave_Formal_Letter_'+safe+'.pdf');
-  $('status').style.color='#15803d';
-  $('status').textContent='Formal letter PDF generated and downloaded.';
+  a.href=url; a.download='Medical_Leave_Formal_Letter_'+safe+'.pdf'; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  $('status').style.color='#15803d'; $('status').textContent='Formal letter PDF generated and downloaded.';
 };
 $('clear').onclick=()=>{
   document.querySelectorAll('input,textarea').forEach(x=>{if(x.type==='checkbox')x.checked=false;else x.value='';});
