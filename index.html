@@ -188,16 +188,35 @@ function addEntry(type='', detail=''){
   $('entries').appendChild(box);
 }
 
-function getActivities(){
+function getActivityItems(){
   const selected=[...document.querySelectorAll('.activity:checked')].map(x=>x.value);
   const details=[...document.querySelectorAll('.entry')].map(e=>{
     const t=e.querySelector('.entry-type').value;
     const d=esc(e.querySelector('.entry-detail').value);
     return d ? `${t} – ${d}` : '';
   }).filter(Boolean);
+  return {selected, details};
+}
 
-  if(details.length) return selected.length ? selected.join(', ') + ':\n' + details.map(x=>'• '+x).join('\n') : details.map(x=>'• '+x).join('\n');
-  return selected.join(', ');
+function getActivities(){
+  const {selected, details}=getActivityItems();
+  const lines=[];
+  if(selected.length) lines.push(...selected);
+  if(details.length) lines.push(...details);
+  return lines.join(', ');
+}
+
+function getLetterActivityLines(){
+  const {selected, details}=getActivityItems();
+  const lines=[];
+  // Avoid duplicating the generic checkbox category when detailed entries
+  // already describe the individual activities.
+  if(details.length){
+    lines.push(...details);
+  } else {
+    lines.push(...selected);
+  }
+  return lines.length ? lines : ['[Academic activities]'];
 }
 
 function buildLetter(){
@@ -205,24 +224,24 @@ function buildLetter(){
   const address=esc($('address').value), illness=esc($('illness').value), doctor=esc($('doctor').value), hospital=esc($('hospital').value), recommendation=esc($('leaveRecommendation').value), request=esc($('letterRequest').value) || 'I kindly request you to accept my medical documents and grant me leave for the aforementioned dates.';
   const activities=getActivities();
   let letter='';
-  if(address) letter+=address+'\\n\\n';
-  if(date) letter+=date+'\\n\\n';
-  letter+='The Dean,\\nFaculty of Technology,\\nWayamba University of Sri Lanka.\\n\\nDear Sir,\\n\\nRequest for Medical Leave - '+name+(reg?' (Reg No: '+reg+')':'')+'\\n\\n';
+  if(address) letter+=address+'\n\n';
+  if(date) letter+=date+'\n\n';
+  letter+='The Dean,\nFaculty of Technology,\nWayamba University of Sri Lanka.\n\nDear Sir,\n\nRequest for Medical Leave - '+name+(reg?' (Reg No: '+reg+')':'')+'\n\n';
   letter+='I am writing to respectfully inform you that I was unable to attend my scheduled academic activities on '+(absence||'[dates of absence]')+', due to '+(reason||'[medical reason]')+'.';
   letter+=illness?' I was suffering from '+illness+', which restricted my ability to attend the scheduled academic activities and required medical attention.':' This medical condition required medical attention.';
-  if(doctor||hospital){ letter+='\\n\\nI received treatment'; if(doctor) letter+=' from '+doctor; if(hospital) letter+=' at '+hospital; letter+='.'; }
+  if(doctor||hospital){ letter+='\n\nI received treatment'; if(doctor) letter+=' from '+doctor; if(hospital) letter+=' at '+hospital; letter+='.'; }
   if(recommendation) letter+=' Upon examination, the doctor recommended that I take '+recommendation+'.';
-  letter+='\\n\\nDue to this unavoidable situation, I missed the following academic activities,\\nName: '+name+(reg?'\\nRegistration No.: '+reg:'')+'\\nAcademic Activities Missed:\\n';
-  if(activities){ letter+=activities.split('\\n').map(x=>x.startsWith('•')?'● '+x.slice(2):'● '+x).join('\\n'); } else letter+='● [Academic activities]';
-  letter+='\\n\\nAs per the university guidelines, I have attached the original Medical Certificate and the duly completed S-01 Form along with this letter for your reference.';
-  letter+='\\n\\n'+request+'\\n\\nThank you for your time and understanding.\\n\\nYours faithfully,\\n'+name+(reg?'\\nRegistration No.: '+reg:'')+(tel?'\\nContact No.: '+tel:'');
+  letter+='\n\nDue to this unavoidable situation, I missed the following academic activities,\nName: '+name+(reg?'\nRegistration No.: '+reg:'')+'\nAcademic Activities Missed:\n';
+  letter+=getLetterActivityLines().map(x=>'● '+x).join('\n');
+  letter+='\n\nAs per the university guidelines, I have attached the original Medical Certificate and the duly completed S-01 Form along with this letter for your reference.';
+  letter+='\n\n'+request+'\n\nThank you for your time and understanding.\n\nYours faithfully,\n'+name+(reg?'\nRegistration No.: '+reg:'')+(tel?'\nContact No.: '+tel:'');
   return letter;
 }
 function generate(){
   const name=esc($('name').value), reg=esc($('reg').value), index=esc($('index').value), tel=esc($('tel').value), absence=esc($('absence').value), date=formatDate($('date').value), reason=esc($('reason').value), activities=getActivities();
   const missing=[]; if(!name)missing.push('Name'); if(!index)missing.push('Index'); if(!absence)missing.push('Dates of absence'); if(!date)missing.push('Date of illness / absence'); if(!reason)missing.push('Reason for absence');
   if(missing.length){$('status').style.color='#dc2626';$('status').textContent='Please fill: '+missing.join(', ');return;}
-  let details='Name: '+name+'\\n'; if(reg)details+='Registration No: '+reg+'\\n'; details+='Dates of absence: '+absence+'\\nAcademic activities missed: '+(activities||'[Not specified]');
+  let details='Name: '+name+'\n'; if(reg)details+='Registration No: '+reg+'\n'; details+='Dates of absence: '+absence+'\nAcademic activities missed: '+(activities||'[Not specified]');
   const body=`Dear Sir,\n\nI am writing to formally notify you that I was unable to attend my scheduled academic activities on ${date}, due to ${reason}.\n\nStudent Details:\n${details}\n\nAs per the university guidelines, I will submit the following documents to the Department Office within 7 calendar days from the date of my illness:\nMy Medical Certificate (MC)\nThe completed S-01 Form\nA formal letter addressed to the Dean (detailing my illness and my treating doctor)\n\nThank you for your time and understanding.\n\nBest regards,\n${name}\n${index}\n${tel?'Tel. '+tel:'Tel.'}`;
   const letter=buildLetter(); $('subject').textContent='Medical Leave of Absence - '+index; $('preview').textContent=body; $('letterPreview').textContent=letter; $('status').style.color='#15803d'; $('status').textContent='Email and formal letter generated successfully.'; return {subject:'Medical Leave of Absence - '+index,body,letter};
 }
@@ -245,12 +264,33 @@ $('mailto').onclick=()=>{
 };
 
 $('pdf').onclick=()=>{
-  const result=generate(); if(!result)return;
-  if(!window.jspdf){$('status').style.color='#dc2626';$('status').textContent='PDF library could not load. Check your internet connection and try again.';return;}
-  const {jsPDF}=window.jspdf, doc=new jsPDF({unit:'mm',format:'a4'}); const margin=20,maxWidth=170; let y=20;
-  doc.setFont('times','normal'); doc.setFontSize(11);
-  result.letter.split('\n').forEach(line=>{ const wrapped=doc.splitTextToSize(line||' ',maxWidth); wrapped.forEach(part=>{if(y>275){doc.addPage();y=20;}doc.text(part,margin,y);y+=5.2;}); if(!line)y+=2.2; });
-  const safe=(esc($('index').value)||'student').replace(/[^a-z0-9_-]+/gi,'_'); doc.save('Medical_Leave_Formal_Letter_'+safe+'.pdf'); $('status').style.color='#15803d'; $('status').textContent='Formal letter PDF generated.';
+  const result=generate();
+  if(!result) return;
+  if(!window.jspdf){
+    $('status').style.color='#dc2626';
+    $('status').textContent='PDF library could not load. Please refresh the page and try again.';
+    return;
+  }
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({unit:'mm',format:'a4'});
+  const margin=20, maxWidth=170, bottom=275;
+  let y=20;
+  doc.setFont('times','normal');
+  doc.setFontSize(11);
+  const paragraphs=result.letter.split('\n');
+  for(const paragraph of paragraphs){
+    if(paragraph.trim()===''){ y+=4; continue; }
+    const wrapped=doc.splitTextToSize(paragraph,maxWidth);
+    for(const line of wrapped){
+      if(y>bottom){ doc.addPage(); y=20; }
+      doc.text(line,margin,y);
+      y+=5.4;
+    }
+  }
+  const safe=(esc($('index').value)||'student').replace(/[^a-z0-9_-]+/gi,'_');
+  doc.save('Medical_Leave_Formal_Letter_'+safe+'.pdf');
+  $('status').style.color='#15803d';
+  $('status').textContent='Formal letter PDF generated and downloaded.';
 };
 $('clear').onclick=()=>{
   document.querySelectorAll('input,textarea').forEach(x=>{if(x.type==='checkbox')x.checked=false;else x.value='';});
