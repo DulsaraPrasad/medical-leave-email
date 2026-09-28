@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Medical Leave of Absence Email Generator">
+<title>Medical Leave of Absence - Email Generator</title>
+<style>
+:root{
+  --bg:#f4f7fb; --card:#fff; --text:#172033; --muted:#667085;
+  --primary:#2563eb; --primary-dark:#1d4ed8; --border:#d9e0ea;
+  --success:#15803d; --danger:#dc2626; --shadow:0 12px 35px rgba(16,24,40,.08);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}
+.container{width:min(1100px,92%);margin:auto}
+header{padding:42px 0 25px}
+.brand{display:flex;align-items:center;gap:13px}
+.logo{width:46px;height:46px;border-radius:13px;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:24px;font-weight:800;box-shadow:0 7px 18px rgba(37,99,235,.25)}
+h1{font-size:clamp(25px,4vw,38px);margin:0}
+.subtitle{color:var(--muted);margin:8px 0 0;font-size:15px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;padding-bottom:45px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:24px;box-shadow:var(--shadow)}
+.card h2{font-size:19px;margin:0 0 18px}
+.field{margin-bottom:16px}
+label{display:block;font-weight:650;font-size:14px;margin-bottom:7px}
+.required{color:var(--danger)}
+input,textarea,select{width:100%;border:1px solid var(--border);border-radius:10px;padding:11px 12px;font:inherit;color:var(--text);background:#fff;outline:none;transition:.15s}
+input:focus,textarea:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.11)}
+textarea{min-height:95px;resize:vertical}
+.hint{font-size:12px;color:var(--muted);margin-top:5px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.activities{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:5px}
+.check{display:flex;align-items:center;gap:8px;border:1px solid var(--border);border-radius:9px;padding:10px;cursor:pointer;font-size:14px}
+.check input{width:auto}
+.activity-extra{margin-top:13px}
+.entry{border:1px solid var(--border);border-radius:12px;padding:13px;margin-top:10px;background:#fafcff}
+.entry-top{display:flex;gap:10px;align-items:center}
+.entry-top select{flex:0 0 150px}
+.entry-top input{flex:1}
+.remove{border:0;background:#fee2e2;color:#b91c1c;border-radius:8px;padding:9px 11px;cursor:pointer;font-weight:700}
+.secondary{border:1px solid var(--border);background:#fff;color:var(--text);border-radius:9px;padding:9px 12px;cursor:pointer;font-weight:650;margin-top:10px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+button.primary{border:0;background:var(--primary);color:#fff;border-radius:10px;padding:12px 16px;cursor:pointer;font-weight:700}
+button.primary:hover{background:var(--primary-dark)}
+button.secondary:hover{background:#f4f6f8}
+.preview{position:sticky;top:18px}
+.subject{background:#f7f9fc;border:1px solid var(--border);border-radius:10px;padding:11px 12px;margin-bottom:13px;font-size:14px}
+.subject strong{margin-right:6px}
+#preview{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;line-height:1.65;background:#fbfcfe;border:1px solid var(--border);border-radius:12px;padding:17px;min-height:500px;overflow:auto}
+.status{min-height:22px;font-size:13px;color:var(--success);margin-top:9px}
+footer{padding:0 0 35px;text-align:center;color:var(--muted);font-size:12px}
+@media(max-width:800px){.grid{grid-template-columns:1fr}.preview{position:static}.two{grid-template-columns:1fr}.entry-top{flex-wrap:wrap}.entry-top select,.entry-top input{flex:1 1 100%}}
+</style>
+</head>
+<body>
+<header class="container">
+  <div class="brand">
+    <div class="logo">✉</div>
+    <div>
+      <h1>Medical Leave of Absence</h1>
+      <p class="subtitle">Generate a formal medical leave notification email.</p>
+    </div>
+  </div>
+</header>
+
+<main class="container grid">
+<section class="card">
+  <h2>Student & Leave Details</h2>
+
+  <div class="field">
+    <label for="name">Name <span class="required">*</span></label>
+    <input id="name" placeholder="e.g. Dulsara Perera">
+  </div>
+
+  <div class="two">
+    <div class="field">
+      <label for="reg">Registration No.</label>
+      <input id="reg" placeholder="e.g. 2024/TECH/123">
+    </div>
+    <div class="field">
+      <label for="index">Index <span class="required">*</span></label>
+      <input id="index" placeholder="e.g. NANO/008">
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="tel">Telephone No.</label>
+    <input id="tel" type="tel" placeholder="e.g. 07XXXXXXXX">
+  </div>
+
+  <div class="field">
+    <label for="absence">Dates of absence <span class="required">*</span></label>
+    <input id="absence" placeholder="e.g. 14 August 2026 or 14–16 August 2026">
+  </div>
+
+  <div class="field">
+    <label for="date">Date of illness / absence <span class="required">*</span></label>
+    <input id="date" type="date">
+    <div class="hint">This date is used in the opening sentence.</div>
+  </div>
+
+  <div class="field">
+    <label for="reason">Reason for absence <span class="required">*</span></label>
+    <input id="reason" placeholder="e.g. gastritis / illness">
+  </div>
+
+  <h2 style="margin-top:25px">Academic Activities Missed</h2>
+  <div class="activities">
+    <label class="check"><input type="checkbox" value="Lectures" class="activity"> Lectures</label>
+    <label class="check"><input type="checkbox" value="Practicals" class="activity"> Practicals</label>
+    <label class="check"><input type="checkbox" value="Tutorials" class="activity"> Tutorials</label>
+    <label class="check"><input type="checkbox" value="Quizzes" class="activity"> Quizzes</label>
+    <label class="check"><input type="checkbox" value="Assignments" class="activity"> Assignments</label>
+    <label class="check"><input type="checkbox" value="Other" class="activity"> Other</label>
+  </div>
+
+  <div id="entries"></div>
+  <button type="button" class="secondary" id="addEntry">+ Add subject / activity details</button>
+  <div class="hint">Use this for specific practicals, lectures, quizzes, assignments, etc.</div>
+
+  <div class="actions">
+    <button class="primary" id="generate">Generate Email</button>
+    <button class="secondary" id="clear">Clear Form</button>
+  </div>
+  <div id="status" class="status"></div>
+</section>
+
+<section class="card preview">
+  <h2>Email Preview</h2>
+  <div class="subject"><strong>Subject:</strong><span id="subject">Medical Leave of Absence - [Index]</span></div>
+  <div id="preview">Fill in the required details and click “Generate Email”.</div>
+  <div class="actions">
+    <button class="primary" id="copy">Copy Email</button>
+    <button class="secondary" id="mailto">Open in Email App</button>
+  </div>
+</section>
+</main>
+
+<footer class="container">
+  Your entered information is processed in this browser and is not sent to a server by this website.
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').trim();
+
+function formatDate(value){
+  if(!value) return '';
+  const d = new Date(value + 'T00:00:00');
+  return d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+}
+
+function addEntry(type='', detail=''){
+  const box=document.createElement('div');
+  box.className='entry';
+  box.innerHTML=`
+    <div class="entry-top">
+      <select class="entry-type">
+        <option ${type==='Lecture'?'selected':''}>Lecture</option>
+        <option ${type==='Practical'?'selected':''}>Practical</option>
+        <option ${type==='Tutorial'?'selected':''}>Tutorial</option>
+        <option ${type==='Quiz'?'selected':''}>Quiz</option>
+        <option ${type==='Assignment'?'selected':''}>Assignment</option>
+        <option ${type==='Other'?'selected':''}>Other</option>
+      </select>
+      <input class="entry-detail" value="${detail.replaceAll('"','&quot;')}" placeholder="e.g. NANO2132 Digital Electronics Practical">
+      <button type="button" class="remove">Remove</button>
+    </div>`;
+  box.querySelector('.remove').onclick=()=>box.remove();
+  $('entries').appendChild(box);
+}
+
+function getActivities(){
+  const selected=[...document.querySelectorAll('.activity:checked')].map(x=>x.value);
+  const details=[...document.querySelectorAll('.entry')].map(e=>{
+    const t=e.querySelector('.entry-type').value;
+    const d=esc(e.querySelector('.entry-detail').value);
+    return d ? `${t} – ${d}` : '';
+  }).filter(Boolean);
+
+  if(details.length) return selected.length ? selected.join(', ') + ':\n' + details.map(x=>'• '+x).join('\n') : details.map(x=>'• '+x).join('\n');
+  return selected.join(', ');
+}
+
+function generate(){
+  const name=esc($('name').value);
+  const reg=esc($('reg').value);
+  const index=esc($('index').value);
+  const tel=esc($('tel').value);
+  const absence=esc($('absence').value);
+  const date=formatDate($('date').value);
+  const reason=esc($('reason').value);
+  const activities=getActivities();
+
+  const missing=[];
+  if(!name) missing.push('Name');
+  if(!index) missing.push('Index');
+  if(!absence) missing.push('Dates of absence');
+  if(!date) missing.push('Date of illness / absence');
+  if(!reason) missing.push('Reason for absence');
+
+  if(missing.length){
+    $('status').style.color='#dc2626';
+    $('status').textContent='Please fill: '+missing.join(', ');
+    return;
+  }
+
+  let details='Name: '+name+'\n';
+  if(reg) details+='Registration No: '+reg+'\n';
+  details+='Dates of absence: '+absence+'\n';
+  details+='Academic activities missed: '+(activities || '[Not specified]');
+
+  const body=`Dear Sir,
+
+I am writing to formally notify you that I was unable to attend my scheduled academic activities on ${date}, due to ${reason}.
+
+Student Details:
+${details}
+
+As per the university guidelines, I will submit the following documents to the Department Office within 7 calendar days from the date of my illness:
+My Medical Certificate (MC)
+The completed S-01 Form
+A formal letter addressed to the Dean (detailing my illness and my treating doctor)
+
+Thank you for your time and understanding.
+
+Best regards,
+${name}
+${index}
+${tel ? 'Tel. '+tel : 'Tel.'}`;
+
+  $('subject').textContent='Medical Leave of Absence - '+index;
+  $('preview').textContent=body;
+  $('status').style.color='#15803d';
+  $('status').textContent='Email generated successfully.';
+  return {subject:'Medical Leave of Absence - '+index, body};
+}
+
+$('generate').onclick=generate;
+$('addEntry').onclick=()=>addEntry();
+
+$('copy').onclick=async()=>{
+  const result=generate();
+  if(!result) return;
+  await navigator.clipboard.writeText('Subject: '+result.subject+'\n\n'+result.body);
+  $('status').style.color='#15803d';
+  $('status').textContent='Email copied to clipboard.';
+};
+
+$('mailto').onclick=()=>{
+  const result=generate();
+  if(!result) return;
+  const url='mailto:?subject='+encodeURIComponent(result.subject)+'&body='+encodeURIComponent(result.body);
+  window.location.href=url;
+};
+
+$('clear').onclick=()=>{
+  document.querySelectorAll('input').forEach(x=>{
+    if(x.type==='checkbox') x.checked=false; else x.value='';
+  });
+  $('entries').innerHTML='';
+  $('subject').textContent='Medical Leave of Absence - [Index]';
+  $('preview').textContent='Fill in the required details and click “Generate Email”.';
+  $('status').textContent='';
+};
+</script>
+</body>
+</html>
