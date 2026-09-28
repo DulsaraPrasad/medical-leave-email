@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Medical Leave of Absence Email Generator">
-<title>Medical Leave of Absence - Email Generator</title>
+<meta name="description" content="Medical Leave of Absence Email & Formal Letter Generator">
+<title>Medical Leave of Absence - Email & Letter Generator</title>
 <style>
 :root{
-  --bg:#f4f7fb; --card:#fff; --text:#172033; --muted:#667085;
-  --primary:#2563eb; --primary-dark:#1d4ed8; --border:#d9e0ea;
-  --success:#15803d; --danger:#dc2626; --shadow:0 12px 35px rgba(16,24,40,.08);
+--bg:#f4f7fb; --card:#fff; --text:#172033; --muted:#667085;
+--primary:#2563eb; --primary-dark:#1d4ed8; --border:#d9e0ea;
+--success:#15803d; --danger:#dc2626; --shadow:0 12px 35px rgba(16,24,40,.08);
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}
@@ -30,6 +30,9 @@ input:focus,textarea:focus,select:focus{border-color:var(--primary);box-shadow:0
 textarea{min-height:95px;resize:vertical}
 .hint{font-size:12px;color:var(--muted);margin-top:5px}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mode{display:flex;gap:10px;margin-bottom:22px}
+.mode .check{flex:1;justify-content:center;font-weight:650;margin-bottom:0}
+.mode .check:has(input:checked){border-color:var(--primary);background:#eff4ff;color:var(--primary-dark)}
 .activities{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:5px}
 .check{display:flex;align-items:center;gap:8px;border:1px solid var(--border);border-radius:9px;padding:10px;cursor:pointer;font-size:14px}
 .check input{width:auto}
@@ -47,112 +50,148 @@ button.secondary:hover{background:#f4f6f8}
 .preview{position:sticky;top:18px}
 .subject{background:#f7f9fc;border:1px solid var(--border);border-radius:10px;padding:11px 12px;margin-bottom:13px;font-size:14px}
 .subject strong{margin-right:6px}
-#preview,#letterPreview{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;line-height:1.65;background:#fbfcfe;border:1px solid var(--border);border-radius:12px;padding:17px;min-height:500px;overflow:auto}
-.letter-preview{margin-top:22px}.letter-paper{font-family:Georgia,"Times New Roman",serif;font-size:14px;line-height:1.7;background:#fff;border:1px solid var(--border);border-radius:12px;padding:22px;min-height:500px;white-space:pre-wrap}.section-note,.pdf-note{font-size:12px;color:var(--muted)}
+#preview{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;line-height:1.65;background:#fbfcfe;border:1px solid var(--border);border-radius:12px;padding:17px;min-height:500px;overflow:auto}
+.letter-paper{font-family:Georgia,"Times New Roman",serif;font-size:14px;line-height:1.7;background:#fff;border:1px solid var(--border);border-radius:12px;padding:22px;min-height:500px;white-space:pre-wrap;overflow:auto}
+.section-note,.pdf-note{font-size:12px;color:var(--muted)}
 .status{min-height:22px;font-size:13px;color:var(--success);margin-top:9px}
 footer{padding:0 0 35px;text-align:center;color:var(--muted);font-size:12px}
 @media(max-width:800px){.grid{grid-template-columns:1fr}.preview{position:static}.two{grid-template-columns:1fr}.entry-top{flex-wrap:wrap}.entry-top select,.entry-top input{flex:1 1 100%}}
 </style>
 </head>
 <body>
+
 <header class="container">
-  <div class="brand">
-    <div class="logo">✉</div>
-    <div>
-      <h1>Medical Leave of Absence</h1>
-      <p class="subtitle">Generate a formal medical leave notification email.</p>
-    </div>
-  </div>
+<div class="brand">
+<div class="logo">✉</div>
+<div>
+<h1>Medical Leave of Absence</h1>
+<p class="subtitle">Generate a formal medical leave email or a formal letter to the Dean.</p>
+</div>
+</div>
 </header>
 
 <main class="container grid">
+
+<!-- ================= FORM ================= -->
 <section class="card">
-  <h2>Student & Leave Details</h2>
 
-  <div class="field">
-    <label for="name">Name / නම <span class="required">*</span></label>
-    <input id="name" placeholder="e.g. Dulsara Prasad">
-  </div>
-  <div class="field">
-    <label for="index">Index <span class="required">*</span></label>
-    <input id="index" placeholder="e.g. 239xxx">
-  </div>
+<h2>What do you need?</h2>
+<div class="mode">
+<label class="check"><input type="radio" name="mode" value="email" checked> ✉ Email</label>
+<label class="check"><input type="radio" name="mode" value="letter"> 📄 Formal Letter</label>
+</div>
 
-  <div class="field">
-    <label for="tel">Telephone No / දුරකථන අංකය.</label>
-    <input id="tel" type="tel" placeholder="e.g. 07XXXXXXXX">
-  </div>
+<h2>Student & Leave Details</h2>
 
-  <div class="field">
-    <label for="absence">Date of Absence / නොපැමිණි දිනය / දින <span class="required">*</span></label>
-    <input id="absence" placeholder="e.g. 14 August 2026 or 14–16 August 2026">
-  </div>
+<div class="field">
+<label for="name">Name / නම <span class="required">*</span></label>
+<input id="name" placeholder="e.g. Dulsara Prasad">
+</div>
 
-  <div class="field">
-    <label for="date">Date of Illness / අසනීප වූ දිනය <span class="required">*</span></label>
-    <input id="date" type="date">
-    <div class="hint">This date is used in the opening sentence.</div>
-  </div>
+<div class="field" id="indexField">
+<label for="index">Index <span class="required">*</span></label>
+<input id="index" placeholder="e.g. 239xxx">
+</div>
 
-  <div class="field">
-    <label for="reason">Reason for Absence / නොපැමිණීමට හේතුව <span class="required">*</span></label>
-    <input id="reason" placeholder="e.g. gastritis / illness">
-  </div>
+<div class="field">
+<label for="tel">Telephone No / දුරකථන අංකය.</label>
+<input id="tel" type="tel" placeholder="e.g. 07XXXXXXXX">
+</div>
 
-  <h2 style="margin-top:25px">Formal Letter Details</h2>
-  <div class="section-note">These details are used for the formal letter PDF.</div>
-  <div class="field"><label for="address">Your Address / ඔබගේ ලිපිනය</label><textarea id="address" placeholder="e.g. 76/2/A, Katuwasgoda, Veyangoda"></textarea></div>
-  <div class="field"><label for="illness">Medical Condition / Illness / රෝග තත්ත්වය / අසනීපය</label><textarea id="illness" placeholder="e.g. an infected wound with cellulitis on my knee"></textarea></div>
-  <div class="field"><label for="doctor">Treating Doctor / Medical Officer / ප්‍රතිකාර කළ වෛද්‍යවරයා / වෛද්‍ය නිලධාරියා</label><input id="doctor" placeholder="e.g. Medical Officer at the Out Patients Department"></div>
-  <div class="field"><label for="hospital">Hospital / Medical Centre / රෝහල / වෛද්‍ය මධ්‍යස්ථානය</label><input id="hospital" placeholder="e.g. Wijaya Kumaratunga Memorial Hospital, Seeduwa"></div>
-  <div class="field"><label for="leaveRecommendation">Doctor's Leave Recommendation / වෛද්‍යවරයා නිර්දේශ කළ නිවාඩු කාලය</label><input id="leaveRecommendation" placeholder="e.g. a two-day leave of absence to rest and recover"></div>
-  <div class="field"><label for="letterRequest">Letter Request / ලිපියෙන් ඉල්ලා සිටින දේ</label><input id="letterRequest" value="I kindly request you to accept my medical documents and grant me leave for the aforementioned dates."></div>
+<div class="field">
+<label for="absence">Date of Absence / නොපැමිණි දිනය / දින <span class="required">*</span></label>
+<input id="absence" placeholder="e.g. 14 August 2026 or 14–16 August 2026">
+</div>
 
-  <h2 style="margin-top:25px">Academic Activities Missed</h2>
-  <div class="activities">
-    <label class="check"><input type="checkbox" value="Lectures" class="activity"> Lectures</label>
-    <label class="check"><input type="checkbox" value="Practicals" class="activity"> Practicals</label>
-    <label class="check"><input type="checkbox" value="Tutorials" class="activity"> Tutorials</label>
-    <label class="check"><input type="checkbox" value="Quizzes" class="activity"> Quizzes</label>
-    <label class="check"><input type="checkbox" value="Assignments" class="activity"> Assignments</label>
-    <label class="check"><input type="checkbox" value="Other" class="activity"> Other</label>
-  </div>
+<div class="field">
+<label for="date">Date of Illness / අසනීප වූ දිනය <span class="required">*</span></label>
+<input id="date" type="date">
+<div class="hint">This date is used in the opening sentence.</div>
+</div>
 
-  <div id="entries"></div>
-  <button type="button" class="secondary" id="addEntry">+ Add subject / activity details</button>
-  <div class="hint">Use this for specific practicals, lectures, quizzes, assignments, etc.</div>
+<div class="field">
+<label for="reason">Reason for Absence / නොපැමිණීමට හේතුව <span class="required">*</span></label>
+<input id="reason" placeholder="e.g. gastritis / illness">
+</div>
 
-  <div class="actions">
-    <button class="primary" id="generate">Generate Email</button>
-    <button class="secondary" id="clear">Clear Form</button>
-  </div>
-  <div id="status" class="status"></div>
+<!-- Letter-only fields -->
+<div id="letterFields">
+<h2 style="margin-top:25px">Formal Letter Details</h2>
+<div class="section-note" style="margin-bottom:14px">These details are used for the formal letter PDF.</div>
+
+<div class="field"><label for="address">Your Address / ඔබගේ ලිපිනය</label><textarea id="address" placeholder="e.g. 76/2/A, Katuwasgoda, Veyangoda"></textarea></div>
+
+<div class="field"><label for="illness">Medical Condition / Illness / රෝග තත්ත්වය / අසනීපය</label><textarea id="illness" placeholder="e.g. an infected wound with cellulitis on my knee"></textarea></div>
+
+<div class="field"><label for="doctor">Treating Doctor / Medical Officer / ප්‍රතිකාර කළ වෛද්‍යවරයා / වෛද්‍ය නිලධාරියා</label><input id="doctor" placeholder="e.g. Medical Officer at the Out Patients Department"></div>
+
+<div class="field"><label for="hospital">Hospital / Medical Centre / රෝහල / වෛද්‍ය මධ්‍යස්ථානය</label><input id="hospital" placeholder="e.g. Wijaya Kumaratunga Memorial Hospital, Seeduwa"></div>
+
+<div class="field"><label for="leaveRecommendation">Doctor's Leave Recommendation / වෛද්‍යවරයා නිර්දේශ කළ නිවාඩු කාලය</label><input id="leaveRecommendation" placeholder="e.g. a two-day leave of absence to rest and recover"></div>
+
+<div class="field"><label for="letterRequest">Letter Request / ලිපියෙන් ඉල්ලා සිටින දේ</label><input id="letterRequest" value="I kindly request you to accept my medical documents and grant me leave for the aforementioned dates."></div>
+</div>
+
+<h2 style="margin-top:25px">Academic Activities Missed</h2>
+
+<div class="activities">
+<label class="check"><input type="checkbox" value="Lectures" class="activity"> Lectures</label>
+<label class="check"><input type="checkbox" value="Practicals" class="activity"> Practicals</label>
+<label class="check"><input type="checkbox" value="Tutorials" class="activity"> Tutorials</label>
+<label class="check"><input type="checkbox" value="Quizzes" class="activity"> Quizzes</label>
+<label class="check"><input type="checkbox" value="Assignments" class="activity"> Assignments</label>
+<label class="check"><input type="checkbox" value="Other" class="activity"> Other</label>
+</div>
+
+<div id="entries"></div>
+<button type="button" class="secondary" id="addEntry">+ Add subject / activity details</button>
+<div class="hint">Use this for specific practicals, lectures, quizzes, assignments, etc.</div>
+
+<div class="actions">
+<button class="primary" id="generate">Generate Email</button>
+<button class="secondary" id="clear">Clear Form</button>
+</div>
+<div id="status" class="status"></div>
+
 </section>
 
+<!-- ================= PREVIEW ================= -->
 <section class="card preview">
-  <h2>Email Preview</h2>
-  <div class="subject"><strong>Subject:</strong><span id="subject">Medical Leave of Absence - [Index]</span></div>
-  <div id="preview">Fill in the required details and click “Generate Email”.</div>
-  <div class="actions">
-    <button class="primary" id="copy">Copy Email</button>
-    <button class="secondary" id="mailto">Open in Email App</button>
-  </div>
-  <div class="letter-preview">
-    <h2>Formal Letter Preview</h2>
-    <div id="letterPreview" class="letter-paper">Fill in the details and click “Generate Email”. The formal letter will appear here too.</div>
-    <div class="actions"><button class="primary" id="pdf">Generate Formal Letter PDF</button></div>
-    <div class="pdf-note">The PDF is generated in your browser. Your personal details are not uploaded to a server by this website.</div>
-  </div>
+
+<div id="emailSection">
+<h2>Email Preview</h2>
+<div class="subject"><strong>Subject:</strong><span id="subject">Medical Leave of Absence - [Index]</span></div>
+<div id="preview">Fill in the required details and click “Generate Email”.</div>
+<div class="actions">
+<button class="primary" id="copy">Copy Email</button>
+<button class="secondary" id="mailto">Open in Email App</button>
+</div>
+</div>
+
+<div id="letterSection">
+<h2>Formal Letter Preview</h2>
+<div id="letterPreview" class="letter-paper">Fill in the details and click “Generate Letter”.</div>
+<div class="actions"><button class="primary" id="pdf">Generate Formal Letter PDF</button></div>
+<div class="pdf-note" style="margin-top:10px">The PDF is generated in your browser. Your personal details are not uploaded to a server by this website.</div>
+</div>
+
 </section>
 </main>
 
 <footer class="container">
-  Your entered information is processed in this browser and is not sent to a server by this website.
+Your entered information is processed in this browser and is not sent to a server by this website.
 </footer>
 
 <script>
+/* ==========================================================
+   SHARED HELPERS
+   ========================================================== */
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').trim();
+
+const DEFAULT_REQUEST = 'I kindly request you to accept my medical documents and grant me leave for the aforementioned dates.';
+const EMAIL_PLACEHOLDER  = 'Fill in the required details and click “Generate Email”.';
+const LETTER_PLACEHOLDER = 'Fill in the details and click “Generate Letter”.';
 
 function formatDate(value){
   if(!value) return '';
@@ -161,102 +200,215 @@ function formatDate(value){
 }
 
 function addEntry(type='', detail=''){
-  const box=document.createElement('div');
-  box.className='entry';
-  box.innerHTML=`
-    <div class="entry-top">
-      <select class="entry-type">
-        <option ${type==='Lecture'?'selected':''}>Lecture</option>
-        <option ${type==='Practical'?'selected':''}>Practical</option>
-        <option ${type==='Tutorial'?'selected':''}>Tutorial</option>
-        <option ${type==='Quiz'?'selected':''}>Quiz</option>
-        <option ${type==='Assignment'?'selected':''}>Assignment</option>
-        <option ${type==='Other'?'selected':''}>Other</option>
-      </select>
-      <input class="entry-detail" value="${detail.replaceAll('"','&quot;')}" placeholder="e.g. NANO2132 Digital Electronics Practical">
-      <button type="button" class="remove">Remove</button>
-    </div>`;
-  box.querySelector('.remove').onclick=()=>box.remove();
+  const box = document.createElement('div');
+  box.className = 'entry';
+  box.innerHTML = `
+<div class="entry-top">
+<select class="entry-type">
+<option ${type==='Lecture'?'selected':''}>Lecture</option>
+<option ${type==='Practical'?'selected':''}>Practical</option>
+<option ${type==='Tutorial'?'selected':''}>Tutorial</option>
+<option ${type==='Quiz'?'selected':''}>Quiz</option>
+<option ${type==='Assignment'?'selected':''}>Assignment</option>
+<option ${type==='Other'?'selected':''}>Other</option>
+</select>
+<input class="entry-detail" value="${detail.replaceAll('"','&quot;')}" placeholder="e.g. NANO2132 Digital Electronics Practical">
+<button type="button" class="remove">Remove</button>
+</div>`;
+  box.querySelector('.remove').onclick = () => box.remove();
   $('entries').appendChild(box);
 }
 
 function getActivityItems(){
-  const selected=[...document.querySelectorAll('.activity:checked')].map(x=>x.value);
-  const details=[...document.querySelectorAll('.entry')].map(e=>{
-    const t=e.querySelector('.entry-type').value;
-    const d=esc(e.querySelector('.entry-detail').value);
+  const selected = [...document.querySelectorAll('.activity:checked')].map(x => x.value);
+  const details = [...document.querySelectorAll('.entry')].map(e => {
+    const t = e.querySelector('.entry-type').value;
+    const d = esc(e.querySelector('.entry-detail').value);
     return d ? `${t} – ${d}` : '';
   }).filter(Boolean);
   return {selected, details};
 }
 
 function getActivities(){
-  const {selected, details}=getActivityItems();
-  const lines=[];
-  if(selected.length) lines.push(...selected);
-  if(details.length) lines.push(...details);
-  return lines.join(', ');
+  const {selected, details} = getActivityItems();
+  return [...selected, ...details].join(', ');
 }
 
 function getLetterActivityLines(){
-  const {selected, details}=getActivityItems();
-  const lines=[];
-  // Avoid duplicating the generic checkbox category when detailed entries
-  // already describe the individual activities.
-  if(details.length){
-    lines.push(...details);
-  } else {
-    lines.push(...selected);
-  }
+  const {selected, details} = getActivityItems();
+  // Avoid duplicating generic checkbox categories when detailed entries exist
+  const lines = details.length ? details : selected;
   return lines.length ? lines : ['[Academic activities]'];
 }
 
+/* ==========================================================
+   PART 1 - EMAIL GENERATION
+   ========================================================== */
+function buildEmail(){
+  const name = esc($('name').value),
+        index = esc($('index').value),
+        tel = esc($('tel').value),
+        absence = esc($('absence').value),
+        date = formatDate($('date').value),
+        reason = esc($('reason').value),
+        activities = getActivities();
+
+  const details =
+    'Name: ' + name + '\n' +
+    'Dates of absence: ' + absence + '\n' +
+    'Academic activities missed: ' + (activities || '[Not specified]');
+
+  const subject = 'Medical Leave of Absence - ' + index;
+
+  const body =
+`Dear Sir,
+
+I am writing to formally notify you that I was unable to attend my scheduled academic activities on ${date}, due to ${reason}.
+
+Student Details:
+${details}
+
+As per the university guidelines, I will submit the following documents to the Department Office within 7 calendar days from the date of my illness:
+My Medical Certificate (MC)
+The completed S-01 Form
+A formal letter addressed to the Dean (detailing my illness and my treating doctor)
+
+Thank you for your time and understanding.
+
+Best regards,
+${name}
+${index}
+${tel ? 'Tel. ' + tel : 'Tel.'}`;
+
+  return { subject, body };
+}
+
+/* ==========================================================
+   PART 2 - FORMAL LETTER GENERATION
+   ========================================================== */
 function buildLetter(){
-  const name=esc($('name').value), tel=esc($('tel').value), absence=esc($('absence').value), date=formatDate($('date').value), reason=esc($('reason').value);
-  const address=esc($('address').value), illness=esc($('illness').value), doctor=esc($('doctor').value), hospital=esc($('hospital').value), recommendation=esc($('leaveRecommendation').value), request=esc($('letterRequest').value) || 'I kindly request you to accept my medical documents and grant me leave for the aforementioned dates.';
-  const activities=getActivities();
-  let letter='';
-  if(address) letter+=address+'\n\n';
-  if(date) letter+=date+'\n\n';
-  letter+='The Dean,\nFaculty of Technology,\nWayamba University of Sri Lanka.\n\nDear Sir,\n\nRequest for Medical Leave - '+name+'\n\n';
-  letter+='I am writing to respectfully inform you that I was unable to attend my scheduled academic activities on '+(absence||'[dates of absence]')+', due to '+(reason||'[medical reason]')+'.';
-  letter+=illness?' I was suffering from '+illness+', which restricted my ability to attend the scheduled academic activities and required medical attention.':' This medical condition required medical attention.';
-  if(doctor||hospital){ letter+='\n\nI received treatment'; if(doctor) letter+=' from '+doctor; if(hospital) letter+=' at '+hospital; letter+='.'; }
-  if(recommendation) letter+=' Upon examination, the doctor recommended that I take '+recommendation+'.';
-  letter+='\n\nDue to this unavoidable situation, I missed the following academic activities,\nName: '+name+'\nAcademic Activities Missed:\n';
-  letter+=getLetterActivityLines().map(x=>'- '+x).join('\n');
-  letter+='\n\nAs per the university guidelines, I have attached the original Medical Certificate and the duly completed S-01 Form along with this letter for your reference.';
-  letter+='\n\n'+request+'\n\nThank you for your time and understanding.\n\n\n\n\nYours faithfully,\n'+name+(tel?'\nContact No.: '+tel:'');
+  const name = esc($('name').value),
+        tel = esc($('tel').value),
+        absence = esc($('absence').value),
+        date = formatDate($('date').value),
+        reason = esc($('reason').value),
+        address = esc($('address').value),
+        illness = esc($('illness').value),
+        doctor = esc($('doctor').value),
+        hospital = esc($('hospital').value),
+        recommendation = esc($('leaveRecommendation').value),
+        request = esc($('letterRequest').value) || DEFAULT_REQUEST;
+
+  let letter = '';
+  if(address) letter += address + '\n\n';
+  if(date) letter += date + '\n\n';
+
+  letter += 'The Dean,\nFaculty of Technology,\nWayamba University of Sri Lanka.\n\nDear Sir,\n\n' +
+            'Request for Medical Leave - ' + name + '\n\n';
+
+  letter += 'I am writing to respectfully inform you that I was unable to attend my scheduled academic activities on ' +
+            (absence || '[dates of absence]') + ', due to ' + (reason || '[medical reason]') + '.';
+
+  letter += illness
+    ? ' I was suffering from ' + illness + ', which restricted my ability to attend the scheduled academic activities and required medical attention.'
+    : ' This medical condition required medical attention.';
+
+  if(doctor || hospital){
+    letter += '\n\nI received treatment';
+    if(doctor) letter += ' from ' + doctor;
+    if(hospital) letter += ' at ' + hospital;
+    letter += '.';
+  }
+  if(recommendation)
+    letter += ' Upon examination, the doctor recommended that I take ' + recommendation + '.';
+
+  letter += '\n\nDue to this unavoidable situation, I missed the following academic activities,\n' +
+            'Name: ' + name + '\nAcademic Activities Missed:\n' +
+            getLetterActivityLines().map(x => '- ' + x).join('\n');
+
+  letter += '\n\nAs per the university guidelines, I have attached the original Medical Certificate and the duly completed S-01 Form along with this letter for your reference.';
+  letter += '\n\n' + request + '\n\nThank you for your time and understanding.\n\n\n\n\nYours faithfully,\n' +
+            name + (tel ? '\nContact No.: ' + tel : '');
+
   return letter;
 }
-function generate(){
-  const name=esc($('name').value), index=esc($('index').value), tel=esc($('tel').value), absence=esc($('absence').value), date=formatDate($('date').value), reason=esc($('reason').value), activities=getActivities();
-  const missing=[]; if(!name)missing.push('Name'); if(!index)missing.push('Index'); if(!absence)missing.push('Dates of absence'); if(!date)missing.push('Date of illness / absence'); if(!reason)missing.push('Reason for absence');
-  if(missing.length){$('status').style.color='#dc2626';$('status').textContent='Please fill: '+missing.join(', ');return;}
-  let details='Name: '+name+'\n'; details+='Dates of absence: '+absence+'\nAcademic activities missed: '+(activities||'[Not specified]');
-  const body=`Dear Sir,\n\nI am writing to formally notify you that I was unable to attend my scheduled academic activities on ${date}, due to ${reason}.\n\nStudent Details:\n${details}\n\nAs per the university guidelines, I will submit the following documents to the Department Office within 7 calendar days from the date of my illness:\nMy Medical Certificate (MC)\nThe completed S-01 Form\nA formal letter addressed to the Dean (detailing my illness and my treating doctor)\n\nThank you for your time and understanding.\n\nBest regards,\n${name}\n${index}\n${tel?'Tel. '+tel:'Tel.'}`;
-  const letter=buildLetter(); $('subject').textContent='Medical Leave of Absence - '+index; $('preview').textContent=body; $('letterPreview').textContent=letter; $('status').style.color='#15803d'; $('status').textContent='Email and formal letter generated successfully.'; return {subject:'Medical Leave of Absence - '+index,body,letter};
+
+/* ==========================================================
+   MODE SWITCHING
+   ========================================================== */
+const getMode = () => document.querySelector('input[name="mode"]:checked').value;
+
+function applyMode(){
+  const m = getMode();
+  $('letterFields').style.display  = m === 'letter' ? '' : 'none';
+  $('indexField').style.display    = m === 'email'  ? '' : 'none';
+  $('emailSection').style.display  = m === 'email'  ? '' : 'none';
+  $('letterSection').style.display = m === 'letter' ? '' : 'none';
+  $('generate').textContent = m === 'email' ? 'Generate Email' : 'Generate Letter';
+  $('status').textContent = '';
 }
-$('generate').onclick=generate;
-$('addEntry').onclick=()=>addEntry();
+document.querySelectorAll('input[name="mode"]').forEach(r => r.onchange = applyMode);
 
-$('copy').onclick=async()=>{
-  const result=generate();
+/* ==========================================================
+   GENERATE (validates, then runs the chosen builder)
+   ========================================================== */
+function generate(){
+  const mode = getMode();
+  const missing = [];
+  if(!esc($('name').value)) missing.push('Name');
+  if(mode === 'email' && !esc($('index').value)) missing.push('Index');
+  if(!esc($('absence').value)) missing.push('Dates of absence');
+  if(!$('date').value) missing.push('Date of illness');
+  if(!esc($('reason').value)) missing.push('Reason for absence');
+
+  if(missing.length){
+    $('status').style.color = '#dc2626';
+    $('status').textContent = 'Please fill: ' + missing.join(', ');
+    return;
+  }
+
+  $('status').style.color = '#15803d';
+
+  if(mode === 'email'){
+    const {subject, body} = buildEmail();
+    $('subject').textContent = subject;
+    $('preview').textContent = body;
+    $('status').textContent = 'Email generated successfully.';
+    return {subject, body};
+  }
+
+  const letter = buildLetter();
+  $('letterPreview').textContent = letter;
+  $('status').textContent = 'Formal letter generated successfully.';
+  return {letter};
+}
+
+/* ==========================================================
+   BUTTON HANDLERS
+   ========================================================== */
+$('generate').onclick = generate;
+$('addEntry').onclick = () => addEntry();
+
+// Email: copy
+$('copy').onclick = async () => {
+  const result = generate();
   if(!result) return;
-  await navigator.clipboard.writeText('Subject: '+result.subject+'\n\n'+result.body);
-  $('status').style.color='#15803d';
-  $('status').textContent='Email copied to clipboard.';
+  await navigator.clipboard.writeText('Subject: ' + result.subject + '\n\n' + result.body);
+  $('status').style.color = '#15803d';
+  $('status').textContent = 'Email copied to clipboard.';
 };
 
-$('mailto').onclick=()=>{
-  const result=generate();
+// Email: open in mail app
+$('mailto').onclick = () => {
+  const result = generate();
   if(!result) return;
-  const url='mailto:?subject='+encodeURIComponent(result.subject)+'&body='+encodeURIComponent(result.body);
-  window.location.href=url;
+  window.location.href = 'mailto:?subject=' + encodeURIComponent(result.subject) +
+                         '&body=' + encodeURIComponent(result.body);
 };
 
-$('pdf').onclick=()=>{
-  const result=generate();
+// Letter: PDF download
+$('pdf').onclick = () => {
+  const result = generate();
   if(!result) return;
 
   // Self-contained PDF writer. No external library or CDN is required.
@@ -264,54 +416,75 @@ $('pdf').onclick=()=>{
     return String(text).replace(/\\/g,'\\\\').replace(/\(/g,'\\(').replace(/\)/g,'\\)').replace(/[^\x20-\x7E]/g,'?');
   }
   function wrapText(text,maxChars){
-    const out=[];
+    const out = [];
     for(const raw of text.split('\n')){
-      if(raw===''){out.push('');continue;}
-      let line='';
+      if(raw === ''){ out.push(''); continue; }
+      let line = '';
       for(const word of raw.trim().split(/\s+/)){
-        const candidate=line?line+' '+word:word;
-        if(candidate.length>maxChars && line){out.push(line);line=word;}else line=candidate;
+        const candidate = line ? line + ' ' + word : word;
+        if(candidate.length > maxChars && line){ out.push(line); line = word; }
+        else line = candidate;
       }
       out.push(line);
     }
     return out;
   }
   function makePDF(text){
-    const W=595.28,H=841.89,M=56.7,leading=17,maxChars=88;
-    const lines=wrapText(text,maxChars), perPage=Math.floor((H-2*M)/leading), pages=[];
+    const W = 595.28, H = 841.89, M = 56.7, leading = 17, maxChars = 88;
+    const lines = wrapText(text,maxChars), perPage = Math.floor((H-2*M)/leading), pages = [];
     for(let i=0;i<lines.length;i+=perPage) pages.push(lines.slice(i,i+perPage));
     if(!pages.length) pages.push(['']);
-    const objects=[]; const add=o=>{objects.push(o);return objects.length;};
-    const catalog=add(''); const pagesObj=add('');
-    const font=add('<< /Type /Font /Subtype /Type1 /BaseFont /Times-Roman >>');
-    const pageIds=[];
+
+    const objects = []; const add = o => { objects.push(o); return objects.length; };
+    const catalog = add(''); const pagesObj = add('');
+    const font = add('<< /Type /Font /Subtype /Type1 /BaseFont /Times-Roman >>');
+    const pageIds = [];
+
     for(const pageLines of pages){
-      let stream='BT\n/F1 11 Tf\n'+M+' '+(H-M-11)+' Td\n';
-      for(const line of pageLines){stream+='('+pdfEscape(line)+') Tj\n0 -'+leading+' Td\n';}
-      stream+='ET';
-      const content=add('<< /Length '+stream.length+' >>\nstream\n'+stream+'\nendstream');
-      pageIds.push(add('<< /Type /Page /Parent '+pagesObj+' 0 R /MediaBox [0 0 '+W+' '+H+'] /Resources << /Font << /F1 '+font+' 0 R >> >> /Contents '+content+' 0 R >>'));
+      let stream = 'BT\n/F1 11 Tf\n' + M + ' ' + (H-M-11) + ' Td\n';
+      for(const line of pageLines){ stream += '(' + pdfEscape(line) + ') Tj\n0 -' + leading + ' Td\n'; }
+      stream += 'ET';
+      const content = add('<< /Length ' + stream.length + ' >>\nstream\n' + stream + '\nendstream');
+      pageIds.push(add('<< /Type /Page /Parent ' + pagesObj + ' 0 R /MediaBox [0 0 ' + W + ' ' + H + '] /Resources << /Font << /F1 ' + font + ' 0 R >> >> /Contents ' + content + ' 0 R >>'));
     }
-    objects[catalog-1]='<< /Type /Catalog /Pages '+pagesObj+' 0 R >>';
-    objects[pagesObj-1]='<< /Type /Pages /Kids ['+pageIds.map(x=>x+' 0 R').join(' ')+'] /Count '+pageIds.length+' >>';
-    let pdf='%PDF-1.4\n%\xE2\xE3\xCF\xD3\n'; const offsets=[0];
-    for(let i=0;i<objects.length;i++){offsets.push(pdf.length);pdf+=(i+1)+' 0 obj\n'+objects[i]+'\nendobj\n';}
-    const xref=pdf.length;
-    pdf+='xref\n0 '+(objects.length+1)+'\n0000000000 65535 f \n';
-    for(let i=1;i<=objects.length;i++) pdf+=String(offsets[i]).padStart(10,'0')+' 00000 n \n';
-    pdf+='trailer\n<< /Size '+(objects.length+1)+' /Root '+catalog+' 0 R >>\nstartxref\n'+xref+'\n%%EOF';
+
+    objects[catalog-1] = '<< /Type /Catalog /Pages ' + pagesObj + ' 0 R >>';
+    objects[pagesObj-1] = '<< /Type /Pages /Kids [' + pageIds.map(x => x + ' 0 R').join(' ') + '] /Count ' + pageIds.length + ' >>';
+
+    let pdf = '%PDF-1.4\n%\xE2\xE3\xCF\xD3\n'; const offsets = [0];
+    for(let i=0;i<objects.length;i++){ offsets.push(pdf.length); pdf += (i+1) + ' 0 obj\n' + objects[i] + '\nendobj\n'; }
+    const xref = pdf.length;
+    pdf += 'xref\n0 ' + (objects.length+1) + '\n0000000000 65535 f \n';
+    for(let i=1;i<=objects.length;i++) pdf += String(offsets[i]).padStart(10,'0') + ' 00000 n \n';
+    pdf += 'trailer\n<< /Size ' + (objects.length+1) + ' /Root ' + catalog + ' 0 R >>\nstartxref\n' + xref + '\n%%EOF';
     return new Blob([pdf],{type:'application/pdf'});
   }
-  const blob=makePDF(result.letter), url=URL.createObjectURL(blob), a=document.createElement('a');
-  const safe=(esc($('index').value)||'student').replace(/[^a-z0-9_-]+/gi,'_');
-  a.href=url; a.download='Medical_Leave_Formal_Letter_'+safe+'.pdf'; document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(()=>URL.revokeObjectURL(url),1000);
-  $('status').style.color='#15803d'; $('status').textContent='Formal letter PDF generated and downloaded.';
+
+  const blob = makePDF(result.letter), url = URL.createObjectURL(blob), a = document.createElement('a');
+  const safe = (esc($('index').value) || esc($('name').value) || 'student').replace(/[^a-z0-9_-]+/gi,'_');
+  a.href = url; a.download = 'Medical_Leave_Formal_Letter_' + safe + '.pdf';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url),1000);
+  $('status').style.color = '#15803d';
+  $('status').textContent = 'Formal letter PDF generated and downloaded.';
 };
-$('clear').onclick=()=>{
-  document.querySelectorAll('input,textarea').forEach(x=>{if(x.type==='checkbox')x.checked=false;else x.value='';});
-  $('letterRequest').value='I kindly request you to accept my medical documents and grant me leave for the aforementioned dates.'; $('entries').innerHTML=''; $('subject').textContent='Medical Leave of Absence - [Index]'; $('preview').textContent='Fill in the required details and click “Generate Email”.'; $('letterPreview').textContent='Fill in the details and click “Generate Email”. The formal letter will appear here too.'; $('status').textContent='';
+
+// Clear form (radio buttons are left untouched so the mode selector keeps working)
+$('clear').onclick = () => {
+  document.querySelectorAll('input,textarea').forEach(x => {
+    if(x.type === 'checkbox') x.checked = false;
+    else if(x.type !== 'radio') x.value = '';
+  });
+  $('letterRequest').value = DEFAULT_REQUEST;
+  $('entries').innerHTML = '';
+  $('subject').textContent = 'Medical Leave of Absence - [Index]';
+  $('preview').textContent = EMAIL_PLACEHOLDER;
+  $('letterPreview').textContent = LETTER_PLACEHOLDER;
+  $('status').textContent = '';
 };
+
+applyMode();
 </script>
+
 </body>
 </html>
