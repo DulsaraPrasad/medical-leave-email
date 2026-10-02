@@ -51,8 +51,30 @@ button.secondary:hover{background:#f4f6f8}
 .subject{background:#f7f9fc;border:1px solid var(--border);border-radius:10px;padding:11px 12px;margin-bottom:13px;font-size:14px}
 .subject strong{margin-right:6px}
 #preview{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;line-height:1.65;background:#fbfcfe;border:1px solid var(--border);border-radius:12px;padding:17px;min-height:500px;overflow:auto}
-.letter-paper{font-family:Georgia,"Times New Roman",serif;font-size:14px;line-height:1.7;background:#fff;border:1px solid var(--border);border-radius:12px;padding:22px;min-height:500px;white-space:pre-wrap;overflow:auto}
-.section-note,.pdf-note{font-size:12px;color:var(--muted)}
+.letter-paper{
+  width:210mm;
+  max-width:100%;
+  margin:0 auto;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:20mm;
+  min-height:297mm;
+  white-space:pre-wrap;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:14px;
+  line-height:1.7;
+  box-sizing:border-box;
+  overflow:auto;
+}
+
+@media(max-width:800px){
+  .letter-paper{
+    width:100%;
+    padding:14mm;
+    min-height:auto;
+  }
+}.section-note,.pdf-note{font-size:12px;color:var(--muted)}
 .status{min-height:22px;font-size:13px;color:var(--success);margin-top:9px}
 footer{padding:0 0 35px;text-align:center;color:var(--muted);font-size:12px}
 @media(max-width:800px){.grid{grid-template-columns:1fr}.preview{position:static}.two{grid-template-columns:1fr}.entry-top{flex-wrap:wrap}.entry-top select,.entry-top input{flex:1 1 100%}}
@@ -221,12 +243,28 @@ function addEntry(type='', detail=''){
 
 function getActivityItems(){
   const selected = [...document.querySelectorAll('.activity:checked')].map(x => x.value);
+
   const details = [...document.querySelectorAll('.entry')].map(e => {
     const t = e.querySelector('.entry-type').value;
     const d = esc(e.querySelector('.entry-detail').value);
-    return d ? `${t} – ${d}` : '';
+    return d ? `${t}: ${d}` : '';
   }).filter(Boolean);
+
   return {selected, details};
+}
+
+function getActivities(){
+  const {selected, details} = getActivityItems();
+  return [...selected, ...details].join(', ');
+}
+
+function getLetterActivityLines(){
+  const {selected, details} = getActivityItems();
+
+  // Use detailed entries when available to avoid duplication
+  const lines = details.length ? details : selected;
+
+  return lines.length ? lines : ['[Academic activities]'];
 }
 
 function getActivities(){
@@ -323,8 +361,8 @@ function buildLetter(){
     letter += ' Upon examination, the doctor recommended that I take ' + recommendation + '.';
 
   letter += '\n\nDue to this unavoidable situation, I missed the following academic activities,\n' +
-            'Name: ' + name + '\nAcademic Activities Missed:\n' +
-            getLetterActivityLines().map(x => '- ' + x).join('\n');
+          'Name: ' + name + '\nAcademic Activities Missed:\n' +
+          getLetterActivityLines().map(x => '- ' + x).join('\n');
 
   letter += '\n\nAs per the university guidelines, I have attached the original Medical Certificate and the duly completed S-01 Form along with this letter for your reference.';
   letter += '\n\n' + request + '\n\nThank you for your time and understanding.\n\n\n\n\nYours faithfully,\n' +
