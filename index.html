@@ -77,7 +77,36 @@ button.secondary:hover{background:#f4f6f8}
 }.section-note,.pdf-note{font-size:12px;color:var(--muted)}
 .status{min-height:22px;font-size:13px;color:var(--success);margin-top:9px}
 footer{padding:0 0 35px;text-align:center;color:var(--muted);font-size:12px}
-@media(max-width:800px){.grid{grid-template-columns:1fr}.preview{position:static}.two{grid-template-columns:1fr}.entry-top{flex-wrap:wrap}.entry-top select,.entry-top input{flex:1 1 100%}}
+
+.made-by{
+  margin-top:12px;
+  font-size:12px;
+  color:var(--muted);
+  letter-spacing:.3px;
+  opacity:.9;
+}
+
+.made-by .spark{
+  display:inline-block;
+  color:var(--primary);
+  animation:sparkle 2s ease-in-out infinite;
+}
+
+.made-by .name{
+  font-weight:650;
+  color:var(--text);
+}
+
+@keyframes sparkle{
+  0%,100%{
+    transform:scale(1) rotate(0deg);
+    opacity:.65;
+  }
+  50%{
+    transform:scale(1.3) rotate(15deg);
+    opacity:1;
+  }
+}@media(max-width:800px){.grid{grid-template-columns:1fr}.preview{position:static}.two{grid-template-columns:1fr}.entry-top{flex-wrap:wrap}.entry-top select,.entry-top input{flex:1 1 100%}}
 </style>
 </head>
 <body>
@@ -201,7 +230,12 @@ footer{padding:0 0 35px;text-align:center;color:var(--muted);font-size:12px}
 </main>
 
 <footer class="container">
-Your entered information is processed in this browser and is not sent to a server by this website.
+  Your entered information is processed in this browser and is not sent to a server by this website.
+
+  <div class="made-by">
+    <span class="spark">✦</span>
+    Crafted with care · <span class="name">Dulsara</span>
+  </div>
 </footer>
 
 <script>
